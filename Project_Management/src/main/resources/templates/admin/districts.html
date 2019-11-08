@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <div th:if="${SUCCESS}" class="mt-5 alert alert-info">
+            Pomyślnie dodano
+        </div>
+        <div th:if="${DELETE_SUCCESS}" class="mt-5 alert alert-info">
+            Pomyślnie usunięto
+        </div>
+        <div th:if="${CHANGE_MAIN_SUCCESS}" class="mt-5 alert alert-info">
+            Pomyślnie zmieniono główny okręg
+        </div>
+
+        <div class="header row">
+            <h2>Zarządzanie okręgami</h2>
+            <div>
+                <a role="button" class="new-invoice btn btn-outline-secondary" th:href="@{/admin/district/new-district}">Dodaj okręg </a>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Główny</th>
+                <th scope="col">Usuń</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="district, i : ${DISTRICT_LIST}">
+                <th scope="row"><a th:href="@{/admin/modify-district(id=${district.id})}" th:text="${i.index}"></a></th>
+                <td><a th:href="@{'/admin/district/' + ${district.id}}" th:text="${district.name}"></a></td>
+                <td>
+                    <div th:unless="${district.isMain}">
+                        <form id="update_main_district_form" method="post" th:action="@{'/admin/district/main/' + ${district.id}}">
+                            <button type="submit">Ustaw</button>
+                        </form>
+                    </div>
+                    <div th:if="${district.isMain}">
+                        <span class="oi oi-check"></span>
+                    </div>
+                </td>
+                <td>
+                    <form id="form"
+                          method="POST"
+                          th:action="@{'/admin/district/delete/' + ${district.id}}">
+                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
+                                th:attr="data-target='#modal'+${district.id}">
+                            <span class="oi oi-trash"> </span>
+                        </button>
+                        <input type="hidden" name="DISTRICT_ID" th:value="${district.id}"/>
+                        <div class="modal fade" th:id="'modal'+${district.id}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Usuń okręg</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Czy na pewno chcesz usunąć okręg?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Usuń</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

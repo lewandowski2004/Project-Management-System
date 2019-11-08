@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <div class="header row">
+            <h2>Zarządzaj użytkownikami</h2>
+            <div>
+                <a role="button" class="new-invoice btn btn-outline-secondary" href="/admin/new-user">Dodaj
+                    użytkownika </a>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Imię</th>
+                <th scope="col">Nazwisko</th>
+                <th scope="col">Ardres email</th>
+                <th scope="col">Uprawnienia</th>
+                <th scope="col">Usuń</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="users, i : ${USER_LIST}">
+                <th scope="row"><a th:href="@{/admin/modify-user(id=${users.id})}" th:text="${i.index}"></a></th>
+                <td><a th:href="@{/admin/modify-user(id=${users.id})}" th:text="${users.firstName}"></a></td>
+                <td><a th:href="@{/admin/modify-user(id=${users.id})}" th:text="${users.lastName}"></a></td>
+                <td><a th:href="@{/admin/modify-user(id=${users.id})}" th:text="${users.email}"></a></td>
+                <td><a th:href="@{/admin/modify-user(id=${users.id})}">
+                    <span th:each="role : ${users.roles}" class="badge badge-pill badge-primary"
+                          th:text="${role.value}"> </span>
+                </a></td>
+                <td>
+                    <form id="form"
+                          method="POST"
+                          th:action="@{/admin/delete-user}">
+                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
+                                th:attr="data-target='#modal'+${users.id}">
+                            <span class="oi oi-trash"> </span>
+                        </button>
+                        <input type="hidden" name="ID_USER" th:value="${users.id}"/>
+                        <div class="modal fade" th:id="'modal'+${users.id}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Usuń użytkownika</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Czy na pewno chcesz usunąć użytkownika?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Usuń</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

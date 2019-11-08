@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <br/>
+    <h3>Dodaj użytkownika</h3>
+    <hr/>
+    <form id="form"
+          class="form-horizontal" method="post"
+          th:object="${NEW_USER}"
+          th:action="@{/admin/save-user}">
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Imię</label>
+            <div class="col-10">
+                <input class="form-control" type="text" th:field="*{firstName}"/>
+                <input class="form-control" type="hidden" th:field="*{id}"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('firstName')}"
+                     th:errors="*{firstName}">
+                    Name error
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Nazwisko</label>
+            <div class="col-10">
+                <input class="form-control" type="text" th:field="*{lastName}"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('lastName')}"
+                     th:errors="*{lastName}">
+                    Name error
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Email</label>
+            <div class="col-10">
+                <input class="form-control" type="text" th:field="*{email}"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('email')}"
+                     th:errors="*{email}">
+                    Name error
+                </div>
+                <div th:if="${ERROR_MESSAGE}" style="color:red; text-align: left;" th:text="${ERROR_MESSAGE}"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label th:if="!${NEW_PASSWORD}" class="col-2 col-form-label">Hasło</label>
+            <label th:if="${NEW_PASSWORD}" class="col-2 col-form-label" th:text="${NEW_PASSWORD}"></label>
+            <div class="col-10">
+                <input class="form-control" type="password" th:field="*{password}" id="password"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('password')}"
+                     th:errors="*{password}">
+                    password error
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Powtórz hasło</label>
+            <div class="col-10">
+                <input class="form-control" type="password" value="" th:field="*{passwordConfirm}"
+                       id="passwordConfirm"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('${NEW_USER}')}"
+                     th:errors="${NEW_USER}">
+                    password error
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Funkcje: </label>
+            <div class="col-10">
+                <div class="form-check" th:each="role, stat: ${ROLE_LIST}">
+                    <input type="checkbox" class="form-check-input" th:field="*{roles}" th:value="${role.id}"
+                           th:id="${role.id}"/>
+                    <label class="form-check-label" th:text="${role.value}" th:for="${role.id}"></label>
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+        <button type="submit" class="btn btn-secondary btn-lg btn-block buttonSave">Zapisz</button>
+    </form>
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

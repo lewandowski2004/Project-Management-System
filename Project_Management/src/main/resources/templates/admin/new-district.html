@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <br/>
+    <h3>Dodaj Okrąg</h3>
+    <hr/>
+    <form id="form"
+          class="form-horizontal" method="post"
+          th:object="${NEW_DISTRICT}"
+          th:action="@{/admin/district/save}">
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Nazwa</label>
+            <div class="col-10">
+                <input class="form-control" type="text" th:field="*{name}"/>
+                <input class="form-control" type="hidden" th:field="*{id}"/>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('name')}"
+                     th:errors="*{name}">
+                    Name error
+                </div>
+                <div style="color:red; text-align: left;" th:if="${#fields.hasErrors('${NEW_DISTRICT}')}"
+                     th:errors="${NEW_DISTRICT}">
+                    error id
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" th:field="*{isMain}"/>
+
+        <button type="submit" class="btn btn-secondary btn-lg btn-block buttonSave">Zapisz</button>
+    </form>
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
